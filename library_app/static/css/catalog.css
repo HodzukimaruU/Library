@@ -1,0 +1,54 @@
+@import url('style.css');
+
+ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    list-style-type: none;
+    margin: 0;
+}
+
+li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    width: calc(33% - 20px);
+    box-sizing: border-box;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+li:hover {
+    transform: scale(1.05);
+    border-color: #7420d5;
+}
+
+a {
+    text-decoration: none;
+    color: #7420d5;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px;
+    margin: 20px 0;
+    color: #7420d5;
+}
+
+
+@media (max-width: 768px) {
+    li {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    li {
+        width: 100%;
+    }
+}
