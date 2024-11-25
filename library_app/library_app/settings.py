@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -42,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_celery_beat',
     'core.apps.CoreConfig',
+    'django_celery_results'
 ]
 
 MIDDLEWARE = [
@@ -148,3 +151,20 @@ EMAIL_FROM = os.environ["EMAIL_FROM"]
 DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 
 SERVER_HOST = os.environ["SERVER_HOST"]
+
+# Celery
+CELERY_IMPORTS = ('core.tasks',)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
+CELERY_TIMEZONE = os.environ["CELERY_TIMEZONE"]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.environ["CACHE_BACKEND"],
+    }
+}
+
+CELERY_CACHE_BACKEND = os.environ["CELERY_CACHE_BACKEND"]

@@ -1,37 +1,38 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central Library</title>
-    <link rel="stylesheet" href="{% static 'css/book_view.css' %}">
-</head>
-<body>
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'catalog' %}">Catalog</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'add_book' %}">Add Book</a>
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'logout' %}">Logout</a>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>
-        {% endif %}
-    </nav>
-    <h1>Your Books</h1>
+    <head>  
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+        <title>Центральная библиотека</title>
+        <link rel="stylesheet" href="{% static 'css/book_view.css' %}">
+    </head>
+
+    <body>
+        <nav>
+            <a href="{% url 'home' %}">Главная</a>
+            <a href="{% url 'catalog' %}">Каталог</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'add_book' %}">Добавить книгу</a>
+                <a href="{% url 'profile' %}">Профиль</a>
+                <a href="{% url 'logout' %}">Выход из системы</a>
+            {% else %}
+                <a href="{% url 'login' %}">Авторизоваться</a>
+            {% endif %}
+        </nav>
+    <h1>Ваши добавленные книги</h1>
     <div class="books-container">
         {% if books %}
             {% for book in books %}
                 <div class="book-item">
                     <h2><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a></h2>
-                    <p><strong>Author:</strong> {{ book.author }}</p>
+                    <p><strong>Автор:</strong> {{ book.author }}</p>
                     {% if book.cover_image %}
                         <img src="{{ book.cover_image.url }}" alt="{{ book.title }} Cover">
                     {% endif %}
-                    <p><strong>Description:</strong> {{ book.description }}</p>
-                    <p><strong>Published:</strong> {{ book.publication_date }}</p>
-                    <p><strong>Genres:</strong> 
+                    <p><strong>Описание:</strong> {{ book.description }}</p>
+                    <p><strong>Дата публикации:</strong> {{ book.publication_date }}</p>
+                    <p><strong>Жанры:</strong> 
                         {% for genre in book.genres.all %}
                             {{ genre.name }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
@@ -39,12 +40,12 @@
                 </div>
             {% endfor %}
         {% else %}
-            <p>You haven't added any books yet.</p>
+            <p>Вы еще не добавили ни одной книги.</p>
         {% endif %}
     </div>
     <footer>
         <div class="footer-content">
-            <p>&copy; 2024 Central Library. All rights reserved.</p>
+            <p>&copy; 2024 Центральная библиотека. Все права защищены.</p>
         </div>
     </footer>
 </body>

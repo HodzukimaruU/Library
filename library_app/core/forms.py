@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Book, Genre
 
 class RegistrationForm(UserCreationForm):
-    first_name = forms.CharField(max_length=15, required=True)
+    username = forms.CharField(max_length=15, required=True)
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)
     email = forms.EmailField(required=True)
@@ -21,32 +21,35 @@ class RegistrationForm(UserCreationForm):
 class BookForm(forms.ModelForm):
     title = forms.CharField(
         max_length=100,
-        label="Title",
-        widget=forms.TextInput(attrs={'placeholder': 'Enter the book title'}),
+        label="Заголовок",
+        widget=forms.TextInput(attrs={'placeholder': 'Введите название книги'}),
     )
     author = forms.CharField(
         max_length=100,
-        label="Author",
-        widget=forms.TextInput(attrs={'placeholder': 'Enter the author of the book'}),
+        label="Автор",
+        widget=forms.TextInput(attrs={'placeholder': 'Введите автора книги'}),
+    )
+    cover_image = forms.ImageField(
+        label="Обложка книги",
     )
     genres = forms.ModelMultipleChoiceField(
         queryset=Genre.objects.all(),
         widget=forms.CheckboxSelectMultiple(),
-        label="Genres"
+        label="Жанры"
     )
     publication_date = forms.DateField(
-        label="Publication date",
+        label="Дата публикации",
         widget=forms.DateInput(attrs={'type': 'date'}),
     )
     pages = forms.CharField(
         max_length=100,
-        label="Pages",
-        widget=forms.TextInput(attrs={'placeholder': 'Enter the number of book pages'}),
+        label="Страницы",
+        widget=forms.TextInput(attrs={'placeholder': 'Введите количество страниц книги'}),
     )
     description = forms.CharField(
         required=False,
-        label="Description of the book",
-        widget=forms.Textarea(attrs={'placeholder': 'Enter book description', 'class': 'no-resize'}),
+        label="Описание книги",
+        widget=forms.Textarea(attrs={'placeholder': 'Введите описание книги', 'class': 'no-resize'}),
     )
 
     class Meta:

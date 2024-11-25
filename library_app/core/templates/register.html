@@ -4,23 +4,23 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
+    <title>Регистрация</title>
     <link rel="stylesheet" href="{% static 'css/login_register.css' %}">
 </head>
 <body>
     <header>
-        <h1>Registration</h1>
+        <h1>Регистрация</h1>
     </header>
     <div class="container">
         <form method="POST" class="form-container">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="button">Sign up</button>
+            <button type="submit" class="button">Зарегистрироваться</button>
         </form>
-        <p>You already have an account? <a href="{% url 'login' %}">Login</a></p>
+        <p>У вас уже есть аккаунт?<a href="{% url 'login' %}">Войти</a></p>
     </div>
     <footer>
-        <p>&copy; 2024 TaskMaster. All rights reserved.</p>
+        <p>&copy; 2024 Центральная библиотека. Все права защищены.</p>
     </footer>
 </body>
 </html>

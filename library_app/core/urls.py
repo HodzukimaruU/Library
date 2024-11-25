@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import (
+from core.api import BookListView
+from core.views import (
     profile_view,
     register_view,
     login_view, logout_view,
@@ -31,5 +32,7 @@ urlpatterns = [
     path('books/<int:book_id>/edit/', edit_book_view, name='edit_book'),
     path('books/<int:book_id>/delete/', delete_book_view, name='delete_book'),
     path('add_book/', add_book_view, name='add_book'),
+
+    path('api/', BookListView.as_view(), name='book-list'),
 ]
 
