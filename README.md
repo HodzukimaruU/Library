@@ -2,6 +2,13 @@
 
 Это Django-приложение для управления книгами и пользовательскими аккаунтами. Оно позволяет пользователям регистрироваться, подтверждать электронную почту, добавлять и управлять книгами, а также просматривать каталог книг по жанрам.
 
+## Технологии
+
+- **Django**
+- **Django REST Framework**
+- **SQLite**
+- **Celery и Redis**
+
 ## Основные функции
 
 ### Аутентификация и регистрация
@@ -23,9 +30,36 @@
 - **Просмотр книги**: Просмотр деталей книги
 - Просмотр книг по жанру: Каталог книг, принадлежащих конкретному жанру.
 
+### Celery
+
+- Реализована переодическая задача, которая отправляет ссылку на ютуб-видео раз в 10 минут (Так же в базе добавлен интервал раз в 1 минуту).
+- Использование celery beat для переодических задач и celery results для отображения результатов задач в базе.
+- Конфигурация celery через .env файл
+
+  Для проверки переодической задачи в файле tasks.py в переменной recipient_list укажите почту на которую переодическая задача будет отправлять письмо:
+
+```yaml
+@shared_task
+def send_periodic_email():
+    subject = 'Регулярное уведомление'
+    message = 'Привет! Вот ссылка на интересное видео: https://www.youtube.com/watch?v=rCindpkTgnk'
+    from_email = settings.DEFAULT_FROM_EMAIL 
+    recipient_list = ['укажите_почту']
+
+    send_mail(subject, message, from_email, recipient_list)
+
+    return 'Email sent successfully'{
+    "start_date": "2020-01-01",
+    "end_date": "2023-12-31",
+    "min_pages": 100,
+    "max_pages": 500
+}
+
+```
+
 ### API
 
-POST запрос на получение списка книг с ранжирование по количеству страниц в отдельном поле в указанный период.
+POST запрос на получение списка книг с ранжированием по количеству страниц в отдельном поле в указанный период.
 Для проверки запроса можно использовать postman и через отправить на урл http://127.0.0.1:8000/api/ вот такой body:
 
 ```yaml
@@ -50,14 +84,6 @@ WHERE publication_date >= '2020-01-01'
 ORDER BY pages;
 ```
 
-## Технологии
-
-- **Django**: Backend и рендеринг HTML-шаблонов.
-- **Django REST Framework**: Для реализации API.
-- **SQLite**: Встроенная база данных.
-- **Celery и Redis**: Планирование задач (например, отправка email).
-- **Bootstrap**: Оформление интерфейса.
-
 ## Запуск и настройка
 
 ### Требования
@@ -71,10 +97,29 @@ ORDER BY pages;
 
 ```yaml
 
+SECRET_KEY = 'your_django_key'
+DEBUG_MODE = True
+SERVER_HOST = 'http://127.0.0.1:8000'
 
+###### SMTP ######
+EMAIL_HOST = 'your_smtp_server'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = 'your_smtp_login'
+EMAIL_HOST_PASSWORD = 'your_smtp_password'
+# EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_FROM = 'sender's_email'
+DEFAULT_FROM_EMAIL = 'sender's_email'
+
+###### CELERY ######
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE = 'Europe/Minsk'
+CELERY_CACHE_BACKEND = 'default'
+CACHE_BACKEND = 'redis://redis:6379/1'
 ```
 
-Запустите:
+Зайдите в директорию с docker-compose.yaml и запустите в консоли :
 
 ```shell
 docker-compose up -d
