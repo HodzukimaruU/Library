@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    container_name: django_app
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+  celery_worker:
+    build: .
+    container_name: celery_worker
+    working_dir: /app/library_app
+    command: celery -A library_app worker -l INFO
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+  celery_beat:
+    build: .
+    container_name: celery_beat
+    working_dir: /app/library_app
+    command: celery -A library_app beat -l INFO
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    
